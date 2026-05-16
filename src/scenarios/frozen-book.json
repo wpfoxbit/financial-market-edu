@@ -1,0 +1,13 @@
+{
+  "id": "frozen-book",
+  "name": "Frozen book",
+  "description": "Book is seeded and then sits still — no ambient liquidity refresh and no market flow. Ideal for showing how the student's own orders interact with a static book.",
+  "seed": 1,
+  "symbol": { "id": "BTC-USD-FAKE", "base": "BTC", "quote": "USD", "tickSize": 0.5, "qtyStep": 0.01 },
+  "timeframe": "1s",
+  "initialMidPrice": 50000,
+  "seedSpread": 1,
+  "seedLevels": 15,
+  "seedQtyPerLevel": 2,
+  "generators": []
+}

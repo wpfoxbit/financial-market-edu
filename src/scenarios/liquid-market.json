@@ -1,0 +1,39 @@
+{
+  "id": "liquid-market",
+  "name": "Liquid market",
+  "description": "Tight spread, balanced two-sided flow, deep book. Baseline for showing what a healthy market looks like.",
+  "seed": 42,
+  "symbol": { "id": "BTC-USD-FAKE", "base": "BTC", "quote": "USD", "tickSize": 0.5, "qtyStep": 0.01 },
+  "timeframe": "1s",
+  "initialMidPrice": 50000,
+  "seedSpread": 1,
+  "seedLevels": 20,
+  "seedQtyPerLevel": 3,
+  "generators": [
+    {
+      "kind": "liquidity",
+      "id": "liq-1",
+      "params": {
+        "referencePrice": 50000,
+        "targetSpread": 1,
+        "targetLevels": 15,
+        "qtyMean": 3,
+        "qtyStdev": 1,
+        "refreshChance": 0.7,
+        "tickSize": 0.5,
+        "qtyStep": 0.01
+      }
+    },
+    {
+      "kind": "aggression",
+      "id": "agg-1",
+      "params": {
+        "lambda": 0.15,
+        "sizeMean": 1,
+        "sizeStdev": 0.5,
+        "sideBias": 0.5,
+        "qtyStep": 0.01
+      }
+    }
+  ]
+}
