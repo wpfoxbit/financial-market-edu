@@ -1,0 +1,98 @@
+{
+  "app": {
+    "title": "Financial Market Edu",
+    "fakeBadge": "FAKE"
+  },
+  "dom": {
+    "qty": "Qtd",
+    "price": "Preço",
+    "spread": "Spread",
+    "empty": "Book vazio"
+  },
+  "tt": {
+    "time": "Hora",
+    "price": "Preço",
+    "qty": "Qtd",
+    "empty": "Sem trades ainda — clique em Play"
+  },
+  "controls": {
+    "play": "Play",
+    "pause": "Pause",
+    "step": "Passo",
+    "speed": "Velocidade"
+  },
+  "scenario": {
+    "title": "Cenário",
+    "builtin": "Embutidos",
+    "custom": "Personalizados",
+    "reset": "Reiniciar",
+    "export": "Exportar",
+    "import": "Importar",
+    "deleteCustom": "Apagar personalizado",
+    "importError": "Falha ao importar cenário",
+    "seed": "Seed",
+    "timeframe": "Timeframe",
+    "symbol": "Ativo",
+    "generators": "Geradores"
+  },
+  "ticket": {
+    "title": "Boleta",
+    "buy": "Compra",
+    "sell": "Venda",
+    "limit": "Limite",
+    "market": "Mercado",
+    "price": "Preço",
+    "qty": "Quantidade",
+    "submitBuy": "Enviar compra",
+    "submitSell": "Enviar venda",
+    "disabledRealMode": "Trade desabilitado em modo exchange real (feed somente leitura). Volte pra um cenário fake pra enviar ordens."
+  },
+  "source": {
+    "title": "Fonte de dados",
+    "fake": "Fake (simulado)",
+    "realExchanges": "Exchanges reais (dados públicos)",
+    "readOnly": "Feed somente leitura. Ordens do aluno desabilitadas.",
+    "status": {
+      "connecting": "Conectando…",
+      "open": "Conectado",
+      "closed": "Desconectado",
+      "error": "Erro"
+    }
+  },
+  "position": {
+    "title": "Posição & PnL",
+    "netQty": "Posição",
+    "avgEntry": "Preço médio",
+    "realized": "Realizado",
+    "unrealized": "Não realizado",
+    "total": "PnL total",
+    "trades": "Trades",
+    "avgSlippage": "Slippage médio",
+    "bought": "Comprado",
+    "sold": "Vendido"
+  },
+  "chartType": {
+    "candle": "Candle",
+    "line": "Linha",
+    "renko": "Renko",
+    "pf": "P&F"
+  },
+  "chartParam": {
+    "brickSize": "Tijolo",
+    "boxSize": "Caixa",
+    "reversal": "Rev"
+  },
+  "studentOrders": {
+    "open": "Abertas",
+    "history": "Histórico",
+    "noOpen": "Sem ordens abertas",
+    "noHistory": "Sem trades ainda",
+    "time": "Hora",
+    "side": "Lado",
+    "type": "Tipo",
+    "price": "Preço",
+    "qty": "Qtd",
+    "slippage": "Slip",
+    "cancel": "Cancelar"
+  }
+}

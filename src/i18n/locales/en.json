@@ -1,0 +1,98 @@
+{
+  "app": {
+    "title": "Financial Market Edu",
+    "fakeBadge": "FAKE"
+  },
+  "dom": {
+    "qty": "Qty",
+    "price": "Price",
+    "spread": "Spread",
+    "empty": "Book is empty"
+  },
+  "tt": {
+    "time": "Time",
+    "price": "Price",
+    "qty": "Qty",
+    "empty": "No trades yet — press Play"
+  },
+  "controls": {
+    "play": "Play",
+    "pause": "Pause",
+    "step": "Step",
+    "speed": "Speed"
+  },
+  "scenario": {
+    "title": "Scenario",
+    "builtin": "Built-in",
+    "custom": "Custom",
+    "reset": "Reset",
+    "export": "Export",
+    "import": "Import",
+    "deleteCustom": "Delete custom",
+    "importError": "Failed to import scenario",
+    "seed": "Seed",
+    "timeframe": "Timeframe",
+    "symbol": "Symbol",
+    "generators": "Generators"
+  },
+  "ticket": {
+    "title": "Order ticket",
+    "buy": "Buy",
+    "sell": "Sell",
+    "limit": "Limit",
+    "market": "Market",
+    "price": "Price",
+    "qty": "Quantity",
+    "submitBuy": "Submit buy",
+    "submitSell": "Submit sell",
+    "disabledRealMode": "Trading is disabled in live-exchange mode (read-only data feed). Switch to a fake scenario to place orders."
+  },
+  "source": {
+    "title": "Data source",
+    "fake": "Fake (simulated)",
+    "realExchanges": "Real exchanges (public data)",
+    "readOnly": "Read-only feed. Student orders are disabled.",
+    "status": {
+      "connecting": "Connecting…",
+      "open": "Connected",
+      "closed": "Disconnected",
+      "error": "Error"
+    }
+  },
+  "position": {
+    "title": "Position & PnL",
+    "netQty": "Net qty",
+    "avgEntry": "Avg entry",
+    "realized": "Realized",
+    "unrealized": "Unrealized",
+    "total": "Total PnL",
+    "trades": "Trades",
+    "avgSlippage": "Avg slippage",
+    "bought": "Bought",
+    "sold": "Sold"
+  },
+  "chartType": {
+    "candle": "Candle",
+    "line": "Line",
+    "renko": "Renko",
+    "pf": "P&F"
+  },
+  "chartParam": {
+    "brickSize": "Brick",
+    "boxSize": "Box",
+    "reversal": "Rev"
+  },
+  "studentOrders": {
+    "open": "Open",
+    "history": "History",
+    "noOpen": "No open orders",
+    "noHistory": "No trades yet",
+    "time": "Time",
+    "side": "Side",
+    "type": "Type",
+    "price": "Price",
+    "qty": "Qty",
+    "slippage": "Slip",
+    "cancel": "Cancel"
+  }
+}
