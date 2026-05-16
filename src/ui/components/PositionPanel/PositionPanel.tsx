@@ -1,15 +1,16 @@
 import { useTranslation } from "react-i18next";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 import { unrealizedPnl } from "@core/pnl";
 import { avgSlippage } from "@core/pnl";
 
 export function PositionPanel() {
   const { t } = useTranslation();
-  const pos = useSimulationStore((s) => s.studentPosition);
-  const trades = useSimulationStore((s) => s.studentTrades);
-  const bookSnapshot = useSimulationStore((s) => s.bookSnapshot);
-  const flattenPosition = useSimulationStore((s) => s.flattenPosition);
-  const dataSource = useSimulationStore((s) => s.dataSource);
+  const sim = useSimulation();
+  const pos = sim.studentPosition;
+  const trades = sim.studentTrades;
+  const bookSnapshot = sim.bookSnapshot;
+  const flattenPosition = sim.flattenPosition;
+  const dataSource = sim.dataSource;
 
   const mid =
     bookSnapshot?.bids[0] && bookSnapshot?.asks[0]

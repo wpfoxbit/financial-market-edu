@@ -3,23 +3,30 @@ import {
   createChart,
   ColorType,
   LineStyle,
-  type CandlestickData,
   type IChartApi,
   type IPriceLine,
   type ISeriesApi,
+  type LineData,
   type UTCTimestamp,
 } from "lightweight-charts";
 import { useSimulation } from "../../../ui/context/simulation-context";
 
-export function CandleChart() {
+/**
+ * Tick chart — plots every trade as a data point. Unlike candle/line charts
+ * that aggregate by timeframe, this moves on every execution regardless of
+ * clock speed. Ideal for sandbox mode where trades happen on-demand.
+ *
+ * Each trade gets a sequential timestamp so the x-axis advances per trade,
+ * not per wall-clock second.
+ */
+export function TickChart() {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
-  const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+  const seriesRef = useRef<ISeriesApi<"Line"> | null>(null);
   const breakevenLineRef = useRef<IPriceLine | null>(null);
 
   const sim = useSimulation();
-  const closedCandles = sim.closedCandles;
-  const currentCandle = sim.currentCandle;
+  const recentTrades = sim.recentTrades;
   const position = sim.studentPosition;
 
   useEffect(() => {
@@ -35,16 +42,13 @@ export function CandleChart() {
       },
       timeScale: { timeVisible: true, secondsVisible: true, borderColor: "#262626" },
       rightPriceScale: { borderColor: "#262626" },
-      crosshair: { mode: 0 },
       autoSize: true,
     });
-    const series = chart.addCandlestickSeries({
-      upColor: "#22c55e",
-      downColor: "#ef4444",
-      borderUpColor: "#22c55e",
-      borderDownColor: "#ef4444",
-      wickUpColor: "#22c55e",
-      wickDownColor: "#ef4444",
+    const series = chart.addLineSeries({
+      color: "#a78bfa",
+      lineWidth: 2,
+      priceLineVisible: true,
+      lastValueVisible: true,
     });
     chartRef.current = chart;
     seriesRef.current = series;
@@ -59,25 +63,26 @@ export function CandleChart() {
   useEffect(() => {
     const series = seriesRef.current;
     if (!series) return;
-    const data: CandlestickData<UTCTimestamp>[] = closedCandles.map((c) => ({
-      time: (c.timestamp / 1000) as UTCTimestamp,
-      open: c.open,
-      high: c.high,
-      low: c.low,
-      close: c.close,
-    }));
-    if (currentCandle) {
-      data.push({
-        time: (currentCandle.timestamp / 1000) as UTCTimestamp,
-        open: currentCandle.open,
-        high: currentCandle.high,
-        low: currentCandle.low,
-        close: currentCandle.close,
-      });
-    }
-    series.setData(data);
-  }, [closedCandles, currentCandle]);
 
+    // recentTrades is newest-first; reverse to get chronological order.
+    // Deduplicate by timestamp to avoid lightweight-charts errors.
+    const chronological = [...recentTrades].reverse();
+    const seen = new Set<number>();
+    const data: LineData<UTCTimestamp>[] = [];
+
+    for (const tr of chronological) {
+      // Use the trade's real timestamp (seconds). If duplicate second,
+      // bump by 1ms to keep series monotonic.
+      let ts = Math.floor(tr.timestamp / 1000);
+      while (seen.has(ts)) ts++;
+      seen.add(ts);
+      data.push({ time: ts as UTCTimestamp, value: tr.price });
+    }
+
+    series.setData(data);
+  }, [recentTrades]);
+
+  // Breakeven price line
   useEffect(() => {
     const series = seriesRef.current;
     if (!series) return;

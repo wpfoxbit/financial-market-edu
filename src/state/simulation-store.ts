@@ -40,7 +40,7 @@ const MAX_STUDENT_TRADES = 500;
 const MAX_TRADE_LOG = 5000;
 const BOOK_DEPTH = 15;
 
-export type ChartType = "candle" | "line" | "renko" | "pf";
+export type ChartType = "candle" | "line" | "tick" | "renko" | "pf";
 export type DataSource = "fake" | string;
 
 const studentOrderIds = new Set<OrderId>();
@@ -69,6 +69,9 @@ interface SimulationState {
   dataSource: DataSource;
   realSymbol: string | null;
   adapterStatus: AdapterStatus | null;
+  ticketPrice: number | null;
+  ticketSide: Side | null;
+  quickOrder: { price: number; side: Side; x: number; y: number } | null;
   _unsubs: Array<() => void>;
 
   bootstrap: () => void;
@@ -88,6 +91,10 @@ interface SimulationState {
   setRenkoBrickSize: (size: number) => void;
   setPfBoxSize: (size: number) => void;
   setPfReversal: (n: number) => void;
+  setTicketPrice: (price: number, side?: Side) => void;
+  clearTicketPrice: () => void;
+  openQuickOrder: (price: number, side: Side, x: number, y: number) => void;
+  closeQuickOrder: () => void;
   setDataSource: (id: DataSource, symbol?: string) => void;
   setRealSymbol: (symbol: string) => void;
   start: () => void;
@@ -156,6 +163,9 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   dataSource: "fake",
   realSymbol: null,
   adapterStatus: null,
+  ticketPrice: null,
+  ticketSide: null,
+  quickOrder: null,
   _unsubs: [],
 
   bootstrap: () => {
@@ -269,6 +279,9 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       dataSource: "fake",
       realSymbol: null,
       adapterStatus: null,
+      ticketPrice: null,
+      ticketSide: null,
+      quickOrder: null,
       _unsubs: unsubs,
     });
   },
@@ -379,6 +392,11 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       qty: Math.abs(pos.netQty),
     });
   },
+
+  setTicketPrice: (price, side) => set({ ticketPrice: price, ticketSide: side ?? null }),
+  clearTicketPrice: () => set({ ticketPrice: null, ticketSide: null }),
+  openQuickOrder: (price, side, x, y) => set({ quickOrder: { price, side, x, y } }),
+  closeQuickOrder: () => set({ quickOrder: null }),
 
   setChartType: (t) => set({ chartType: t }),
   setChartTimeframe: (tf) => {

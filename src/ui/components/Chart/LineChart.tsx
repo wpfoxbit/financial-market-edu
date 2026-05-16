@@ -9,7 +9,7 @@ import {
   type LineData,
   type UTCTimestamp,
 } from "lightweight-charts";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 export function LineChart() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,9 +17,10 @@ export function LineChart() {
   const seriesRef = useRef<ISeriesApi<"Area"> | null>(null);
   const breakevenLineRef = useRef<IPriceLine | null>(null);
 
-  const closedCandles = useSimulationStore((s) => s.closedCandles);
-  const currentCandle = useSimulationStore((s) => s.currentCandle);
-  const position = useSimulationStore((s) => s.studentPosition);
+  const sim = useSimulation();
+  const closedCandles = sim.closedCandles;
+  const currentCandle = sim.currentCandle;
+  const position = sim.studentPosition;
 
   useEffect(() => {
     if (!containerRef.current) return;

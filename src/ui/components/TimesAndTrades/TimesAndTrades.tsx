@@ -1,11 +1,18 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 export function TimesAndTrades() {
   const { t } = useTranslation();
-  const trades = useSimulationStore((s) => s.recentTrades);
-  const studentTrades = useSimulationStore((s) => s.studentTrades);
+  const sim = useSimulation();
+  const trades = sim.recentTrades;
+  const studentTrades = sim.studentTrades;
+  const setTicketPrice = sim.setTicketPrice;
+
+  const handleRowClick = useCallback(
+    (price: number) => setTicketPrice(price),
+    [setTicketPrice],
+  );
 
   const studentTradeIds = useMemo(
     () => new Set(studentTrades.map((st) => st.id)),
@@ -32,8 +39,9 @@ export function TimesAndTrades() {
             return (
               <div
                 key={tr.id}
-                className={`grid grid-cols-3 px-2 py-0.5 ${rowBg} ${sideColor}`}
+                className={`grid grid-cols-3 px-2 py-0.5 cursor-pointer ${rowBg} ${sideColor}`}
                 title={isYours ? "Your trade" : undefined}
+                onClick={() => handleRowClick(tr.price)}
               >
                 <span className="text-neutral-400">{formatTime(tr.timestamp)}</span>
                 <span className="text-right tabular-nums">{tr.price.toFixed(2)}</span>

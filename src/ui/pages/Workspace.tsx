@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useSimulationStore } from "@state/simulation-store";
+import { SimulationProvider } from "../context/simulation-context";
+import { useMainAdapter } from "../context/use-main-adapter";
 import { Chart } from "../components/Chart/Chart";
 import { DOM } from "../components/DOM/DOM";
 import { TimesAndTrades } from "../components/TimesAndTrades/TimesAndTrades";
@@ -10,13 +12,15 @@ import { OrderTicket } from "../components/OrderTicket/OrderTicket";
 import { PositionPanel } from "../components/PositionPanel/PositionPanel";
 import { StudentOrders } from "../components/StudentOrders/StudentOrders";
 import { AssetManager } from "../components/AssetManager/AssetManager";
+import { QuickOrderPopover } from "../components/DOM/QuickOrderPopover";
 
 export function Workspace() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const bootstrap = useSimulationStore((s) => s.bootstrap);
   const scenario = useSimulationStore((s) => s.scenario);
   const dataSource = useSimulationStore((s) => s.dataSource);
   const realSymbol = useSimulationStore((s) => s.realSymbol);
+  const adapter = useMainAdapter();
   const initializedRef = useRef(false);
 
   useEffect(() => {
@@ -33,28 +37,13 @@ export function Workspace() {
       : `${realSymbol?.toUpperCase()} (LIVE · ${dataSource.toUpperCase()})`;
 
   return (
-    <div className="flex flex-col h-screen text-neutral-100 bg-neutral-950">
-      <header className="flex items-center justify-between px-4 py-2 border-b border-neutral-800">
-        <div className="flex items-center gap-3">
-          <h1 className="text-sm font-semibold tracking-tight">{t("app.title")}</h1>
-          {headerSubtitle && (
-            <span className="text-xs text-neutral-400">{headerSubtitle}</span>
-          )}
+    <SimulationProvider value={adapter}>
+      {headerSubtitle && (
+        <div className="px-4 py-1 text-xs text-neutral-400 border-b border-neutral-800">
+          {headerSubtitle}
         </div>
-        <div className="flex gap-1 text-xs">
-          <LangBtn onClick={() => i18n.changeLanguage("en")} active={i18n.language === "en"}>
-            EN
-          </LangBtn>
-          <LangBtn
-            onClick={() => i18n.changeLanguage("pt-BR")}
-            active={i18n.language === "pt-BR"}
-          >
-            PT
-          </LangBtn>
-        </div>
-      </header>
-
-      <main className="flex-1 flex flex-col min-h-0">
+      )}
+      <div className="flex-1 flex flex-col min-h-0">
         <div className="flex-1 grid grid-cols-[240px_1fr_260px_260px] min-h-0">
           <aside className="border-r border-neutral-800 min-h-0 overflow-hidden flex flex-col">
             <AssetManager />
@@ -83,32 +72,9 @@ export function Workspace() {
             <StudentOrders />
           </section>
         </div>
-      </main>
-
+      </div>
       <Controls />
-    </div>
-  );
-}
-
-function LangBtn({
-  onClick,
-  active,
-  children,
-}: {
-  onClick: () => void;
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-2 py-1 rounded ${
-        active
-          ? "bg-neutral-700 text-white"
-          : "bg-neutral-800 hover:bg-neutral-700 text-neutral-400"
-      }`}
-    >
-      {children}
-    </button>
+      <QuickOrderPopover />
+    </SimulationProvider>
   );
 }

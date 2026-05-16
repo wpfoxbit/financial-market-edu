@@ -1,23 +1,25 @@
 import { useTranslation } from "react-i18next";
 import type { Timeframe } from "@core/types";
-import { useSimulationStore, type ChartType } from "@state/simulation-store";
+import type { ChartType } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 const TIMEFRAMES: Timeframe[] = ["1s", "5s", "15s", "1m", "5m", "15m", "1h"];
-const CHART_TYPES: ChartType[] = ["candle", "line", "renko", "pf"];
+const CHART_TYPES: ChartType[] = ["candle", "line", "tick", "renko", "pf"];
 
 export function ChartHeader() {
   const { t } = useTranslation();
-  const chartType = useSimulationStore((s) => s.chartType);
-  const chartTimeframe = useSimulationStore((s) => s.chartTimeframe);
-  const setChartType = useSimulationStore((s) => s.setChartType);
-  const setChartTimeframe = useSimulationStore((s) => s.setChartTimeframe);
-  const renkoBrickSize = useSimulationStore((s) => s.renkoBrickSize);
-  const pfBoxSize = useSimulationStore((s) => s.pfBoxSize);
-  const pfReversal = useSimulationStore((s) => s.pfReversal);
-  const setRenko = useSimulationStore((s) => s.setRenkoBrickSize);
-  const setBox = useSimulationStore((s) => s.setPfBoxSize);
-  const setReversal = useSimulationStore((s) => s.setPfReversal);
-  const tickSize = useSimulationStore((s) => s.scenario?.symbol.tickSize ?? 0.5);
+  const sim = useSimulation();
+  const chartType = sim.chartType;
+  const chartTimeframe = sim.chartTimeframe;
+  const setChartType = sim.setChartType;
+  const setChartTimeframe = sim.setChartTimeframe;
+  const renkoBrickSize = sim.renkoBrickSize;
+  const pfBoxSize = sim.pfBoxSize;
+  const pfReversal = sim.pfReversal;
+  const setRenko = sim.setRenkoBrickSize;
+  const setBox = sim.setPfBoxSize;
+  const setReversal = sim.setPfReversal;
+  const tickSize = sim.scenario?.symbol.tickSize ?? 0.5;
 
   return (
     <div className="flex items-center justify-between px-3 py-1.5 border-b border-neutral-800 text-xs">

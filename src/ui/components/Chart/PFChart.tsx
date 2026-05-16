@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { PFStream } from "@core/charts";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 const CELL_W = 14;
 const CELL_H = 12;
@@ -8,9 +8,10 @@ const PADDING_X = 56;
 const PADDING_Y = 12;
 
 export function PFChart() {
-  const tradeLog = useSimulationStore((s) => s.tradeLog);
-  const boxSize = useSimulationStore((s) => s.pfBoxSize);
-  const reversal = useSimulationStore((s) => s.pfReversal);
+  const sim = useSimulation();
+  const tradeLog = sim.tradeLog;
+  const boxSize = sim.pfBoxSize;
+  const reversal = sim.pfReversal;
 
   const { columns, range } = useMemo(() => {
     const stream = new PFStream(boxSize, reversal);

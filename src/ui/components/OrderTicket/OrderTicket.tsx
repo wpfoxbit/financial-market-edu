@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 import type { OrderType, Side } from "@core/types";
 
 export function OrderTicket() {
   const { t } = useTranslation();
-  const scenario = useSimulationStore((s) => s.scenario);
-  const bookSnapshot = useSimulationStore((s) => s.bookSnapshot);
-  const submit = useSimulationStore((s) => s.submitStudentOrder);
-  const dataSource = useSimulationStore((s) => s.dataSource);
-  const isReadOnly = dataSource !== "fake";
+  const sim = useSimulation();
+  const scenario = sim.scenario;
+  const bookSnapshot = sim.bookSnapshot;
+  const submit = sim.submitOrder;
+  const isReadOnly = sim.isReadOnly;
+  const ticketPrice = sim.ticketPrice;
+  const ticketSide = sim.ticketSide;
+  const clearTicketPrice = sim.clearTicketPrice;
 
   const tickSize = scenario?.symbol.tickSize ?? 0.5;
   const qtyStep = scenario?.symbol.qtyStep ?? 0.01;
@@ -33,6 +36,16 @@ export function OrderTicket() {
     setPrice((p) => Math.round(p / tickSize) * tickSize);
     setQty((q) => Math.max(qtyStep, Math.round(q / qtyStep) * qtyStep));
   }, [tickSize, qtyStep]);
+
+  // Consume external price-fill signal from DOM / T&T clicks.
+  useEffect(() => {
+    if (ticketPrice !== null) {
+      setPrice(ticketPrice);
+      setType("limit");
+      if (ticketSide) setSide(ticketSide);
+      clearTicketPrice();
+    }
+  }, [ticketPrice, ticketSide, clearTicketPrice]);
 
   const handleSubmit = () => {
     setError(null);

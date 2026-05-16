@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 type Tab = "open" | "history";
 
 export function StudentOrders() {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>("open");
-  const openOrders = useSimulationStore((s) => s.studentOpenOrders);
-  const trades = useSimulationStore((s) => s.studentTrades);
-  const cancel = useSimulationStore((s) => s.cancelStudentOrder);
-  const cancelAll = useSimulationStore((s) => s.cancelAllStudentOrders);
+  const sim = useSimulation();
+  const openOrders = sim.studentOpenOrders;
+  const trades = sim.studentTrades;
+  const cancel = sim.cancelOrder;
+  const cancelAll = sim.cancelAllOrders;
 
   return (
     <div className="flex flex-col h-full text-xs">

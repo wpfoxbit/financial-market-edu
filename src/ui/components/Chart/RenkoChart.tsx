@@ -8,15 +8,16 @@ import {
   type UTCTimestamp,
 } from "lightweight-charts";
 import { RenkoStream } from "@core/charts";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 export function RenkoChart() {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
-  const tradeLog = useSimulationStore((s) => s.tradeLog);
-  const brickSize = useSimulationStore((s) => s.renkoBrickSize);
+  const sim = useSimulation();
+  const tradeLog = sim.tradeLog;
+  const brickSize = sim.renkoBrickSize;
 
   const bricks = useMemo(() => {
     const stream = new RenkoStream(brickSize);

@@ -1,12 +1,30 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import type { Level } from "@core/types";
-import { useSimulationStore } from "@state/simulation-store";
+import type { Level, Side } from "@core/types";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 export function DOM() {
   const { t } = useTranslation();
-  const snap = useSimulationStore((s) => s.bookSnapshot);
-  const openOrders = useSimulationStore((s) => s.studentOpenOrders);
+  const sim = useSimulation();
+  const snap = sim.bookSnapshot;
+  const openOrders = sim.studentOpenOrders;
+  const setTicketPrice = sim.setTicketPrice;
+  const openQuickOrder = sim.openQuickOrder;
+  const dataSource = sim.dataSource;
+
+  const handleRowClick = useCallback(
+    (price: number, side: Side) => setTicketPrice(price, side),
+    [setTicketPrice],
+  );
+
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent, price: number, side: Side) => {
+      if (!e.shiftKey || dataSource !== "fake") return;
+      e.preventDefault();
+      openQuickOrder(price, side, e.clientX, e.clientY);
+    },
+    [openQuickOrder, dataSource],
+  );
 
   const studentPrices = useMemo(() => {
     const bids = new Map<number, number>();
@@ -43,6 +61,8 @@ export function DOM() {
           side="sell"
           maxQty={maxQty}
           yourQty={studentPrices.asks.get(l.price)}
+          onClick={() => handleRowClick(l.price, "sell")}
+          onContextMenu={(e) => handleContextMenu(e, l.price, "sell")}
         />
       ))}
       <div className="px-2 py-1 text-center text-neutral-500 bg-neutral-900 border-y border-neutral-800">
@@ -55,6 +75,8 @@ export function DOM() {
           side="buy"
           maxQty={maxQty}
           yourQty={studentPrices.bids.get(l.price)}
+          onClick={() => handleRowClick(l.price, "buy")}
+          onContextMenu={(e) => handleContextMenu(e, l.price, "buy")}
         />
       ))}
     </div>
@@ -66,19 +88,23 @@ interface RowProps {
   side: "buy" | "sell";
   maxQty: number;
   yourQty?: number;
+  onClick: () => void;
+  onContextMenu: (e: React.MouseEvent) => void;
 }
 
-function Row({ level, side, maxQty, yourQty }: RowProps) {
+function Row({ level, side, maxQty, yourQty, onClick, onContextMenu }: RowProps) {
   const pct = (level.qty / maxQty) * 100;
   const isAsk = side === "sell";
   const isYours = yourQty !== undefined && yourQty > 0;
   const rowBg = isYours ? "bg-amber-500/15 hover:bg-amber-500/25" : "hover:bg-neutral-800/40";
   return (
     <div
-      className={`relative grid grid-cols-3 px-2 py-0.5 ${rowBg} ${
+      className={`relative grid grid-cols-3 px-2 py-0.5 cursor-pointer ${rowBg} ${
         isYours ? "border-l-2 border-amber-500" : ""
       }`}
       title={isYours ? `Yours: ${yourQty!.toFixed(4)}` : undefined}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
     >
       <div
         className={`absolute inset-y-0 ${isAsk ? "right-1/2 bg-red-500/20" : "left-1/2 bg-emerald-500/20"}`}

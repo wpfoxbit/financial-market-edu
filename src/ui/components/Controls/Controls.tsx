@@ -1,17 +1,18 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { useSimulationStore } from "@state/simulation-store";
+import { useSimulation } from "../../../ui/context/simulation-context";
 
 const SPEEDS = [0.25, 0.5, 1, 2, 5] as const;
 
 export function Controls() {
   const { t } = useTranslation();
-  const isRunning = useSimulationStore((s) => s.isRunning);
-  const speed = useSimulationStore((s) => s.speed);
-  const start = useSimulationStore((s) => s.start);
-  const pause = useSimulationStore((s) => s.pause);
-  const step = useSimulationStore((s) => s.step);
-  const setSpeed = useSimulationStore((s) => s.setSpeed);
+  const sim = useSimulation();
+  const isRunning = sim.isRunning;
+  const speed = sim.speed;
+  const start = sim.start;
+  const pause = sim.pause;
+  const step = sim.step;
+  const setSpeed = sim.setSpeed;
 
   return (
     <div className="flex items-center gap-2 px-4 py-2 border-t border-neutral-800 bg-neutral-950">
