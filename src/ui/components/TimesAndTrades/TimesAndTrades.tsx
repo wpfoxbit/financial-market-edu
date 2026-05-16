@@ -1,9 +1,16 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSimulationStore } from "@state/simulation-store";
 
 export function TimesAndTrades() {
   const { t } = useTranslation();
   const trades = useSimulationStore((s) => s.recentTrades);
+  const studentTrades = useSimulationStore((s) => s.studentTrades);
+
+  const studentTradeIds = useMemo(
+    () => new Set(studentTrades.map((st) => st.id)),
+    [studentTrades],
+  );
 
   return (
     <div className="flex flex-col text-xs font-mono h-full">
@@ -16,18 +23,27 @@ export function TimesAndTrades() {
         <div className="p-4 text-neutral-500">{t("tt.empty")}</div>
       ) : (
         <div className="overflow-y-auto flex-1">
-          {trades.map((tr) => (
-            <div
-              key={tr.id}
-              className={`grid grid-cols-3 px-2 py-0.5 hover:bg-neutral-800/40 ${
-                tr.aggressorSide === "buy" ? "text-emerald-400" : "text-red-400"
-              }`}
-            >
-              <span className="text-neutral-400">{formatTime(tr.timestamp)}</span>
-              <span className="text-right tabular-nums">{tr.price.toFixed(2)}</span>
-              <span className="text-right tabular-nums">{tr.qty.toFixed(2)}</span>
-            </div>
-          ))}
+          {trades.map((tr) => {
+            const isYours = studentTradeIds.has(tr.id);
+            const sideColor = tr.aggressorSide === "buy" ? "text-emerald-400" : "text-red-400";
+            const rowBg = isYours
+              ? "bg-amber-500/15 hover:bg-amber-500/25 border-l-2 border-amber-500"
+              : "hover:bg-neutral-800/40";
+            return (
+              <div
+                key={tr.id}
+                className={`grid grid-cols-3 px-2 py-0.5 ${rowBg} ${sideColor}`}
+                title={isYours ? "Your trade" : undefined}
+              >
+                <span className="text-neutral-400">{formatTime(tr.timestamp)}</span>
+                <span className="text-right tabular-nums">{tr.price.toFixed(2)}</span>
+                <span className="text-right tabular-nums">
+                  {tr.qty.toFixed(2)}
+                  {isYours && <span className="ml-1 text-amber-300 text-[10px]">•</span>}
+                </span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

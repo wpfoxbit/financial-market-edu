@@ -54,7 +54,7 @@ export function OrderTicket() {
   }
 
   return (
-    <div className="flex flex-col h-full p-3 gap-3 text-xs">
+    <div className="flex flex-col p-3 gap-2 text-xs">
       <h2 className="text-neutral-400 uppercase tracking-wider text-[10px]">
         {t("ticket.title")}
       </h2>

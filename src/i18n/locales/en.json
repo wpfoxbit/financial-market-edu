@@ -69,7 +69,9 @@
     "trades": "Trades",
     "avgSlippage": "Avg slippage",
     "bought": "Bought",
-    "sold": "Sold"
+    "sold": "Sold",
+    "flatten": "Flatten position",
+    "flattenHelp": "Closes the current position with a market order on the opposite side."
   },
   "chartType": {
     "candle": "Candle",
@@ -93,6 +95,7 @@
     "price": "Price",
     "qty": "Qty",
     "slippage": "Slip",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "cancelAll": "Cancel all"
   }
 }

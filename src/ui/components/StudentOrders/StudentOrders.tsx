@@ -10,16 +10,25 @@ export function StudentOrders() {
   const openOrders = useSimulationStore((s) => s.studentOpenOrders);
   const trades = useSimulationStore((s) => s.studentTrades);
   const cancel = useSimulationStore((s) => s.cancelStudentOrder);
+  const cancelAll = useSimulationStore((s) => s.cancelAllStudentOrders);
 
   return (
     <div className="flex flex-col h-full text-xs">
-      <div className="flex border-b border-neutral-800 px-3 pt-2 gap-2 text-[11px]">
+      <div className="flex items-center border-b border-neutral-800 px-3 pt-2 pb-1 gap-2 text-[11px]">
         <TabBtn active={tab === "open"} onClick={() => setTab("open")}>
           {t("studentOrders.open")} ({openOrders.length})
         </TabBtn>
         <TabBtn active={tab === "history"} onClick={() => setTab("history")}>
           {t("studentOrders.history")} ({trades.length})
         </TabBtn>
+        {tab === "open" && openOrders.length > 0 && (
+          <button
+            onClick={cancelAll}
+            className="ml-auto px-2 py-0.5 rounded bg-red-900/40 hover:bg-red-900/70 text-red-200"
+          >
+            {t("studentOrders.cancelAll")} ({openOrders.length})
+          </button>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto">
         {tab === "open" ? (

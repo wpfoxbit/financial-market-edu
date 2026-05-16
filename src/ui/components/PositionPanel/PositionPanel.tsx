@@ -8,6 +8,8 @@ export function PositionPanel() {
   const pos = useSimulationStore((s) => s.studentPosition);
   const trades = useSimulationStore((s) => s.studentTrades);
   const bookSnapshot = useSimulationStore((s) => s.bookSnapshot);
+  const flattenPosition = useSimulationStore((s) => s.flattenPosition);
+  const dataSource = useSimulationStore((s) => s.dataSource);
 
   const mid =
     bookSnapshot?.bids[0] && bookSnapshot?.asks[0]
@@ -52,6 +54,15 @@ export function PositionPanel() {
         tone={total > 0 ? "positive" : total < 0 ? "negative" : "neutral"}
         bold
       />
+      <button
+        onClick={flattenPosition}
+        disabled={isFlat || dataSource !== "fake"}
+        className="mt-1 px-2 py-1.5 rounded bg-amber-700 hover:bg-amber-600 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-neutral-800"
+        title={t("position.flattenHelp") ?? ""}
+      >
+        {t("position.flatten")}
+      </button>
+
       <div className="pt-2 mt-1 border-t border-neutral-800 space-y-1.5">
         <Stat label={t("position.trades")} value={String(pos.tradeCount)} />
         <Stat

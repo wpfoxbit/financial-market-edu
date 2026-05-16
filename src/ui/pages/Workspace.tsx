@@ -72,11 +72,11 @@ export function Workspace() {
             <TimesAndTrades />
           </section>
         </div>
-        <div className="h-[230px] grid grid-cols-[240px_320px_1fr] border-t border-neutral-800 min-h-0">
-          <aside className="border-r border-neutral-800 min-h-0 overflow-hidden">
+        <div className="h-[300px] grid grid-cols-[240px_320px_1fr] border-t border-neutral-800 min-h-0">
+          <aside className="border-r border-neutral-800 min-h-0 overflow-y-auto">
             <PositionPanel />
           </aside>
-          <section className="border-r border-neutral-800 min-h-0 overflow-hidden">
+          <section className="border-r border-neutral-800 min-h-0 overflow-y-auto">
             <OrderTicket />
           </section>
           <section className="min-h-0 overflow-hidden">

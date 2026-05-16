@@ -69,7 +69,9 @@
     "trades": "Trades",
     "avgSlippage": "Slippage médio",
     "bought": "Comprado",
-    "sold": "Vendido"
+    "sold": "Vendido",
+    "flatten": "Zerar posição",
+    "flattenHelp": "Fecha a posição atual com uma ordem a mercado na ponta oposta."
   },
   "chartType": {
     "candle": "Candle",
@@ -93,6 +95,7 @@
     "price": "Preço",
     "qty": "Qtd",
     "slippage": "Slip",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "cancelAll": "Cancelar todas"
   }
 }

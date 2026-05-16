@@ -81,6 +81,8 @@ interface SimulationState {
     | { ok: true; orderId: OrderId }
     | { ok: false; error: string };
   cancelStudentOrder: (orderId: OrderId) => void;
+  cancelAllStudentOrders: () => void;
+  flattenPosition: () => void;
   setChartType: (t: ChartType) => void;
   setChartTimeframe: (tf: Timeframe) => void;
   setRenkoBrickSize: (size: number) => void;
@@ -356,6 +358,26 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     set((s) => ({
       studentOpenOrders: s.studentOpenOrders.filter((o) => o.id !== orderId),
     }));
+  },
+
+  cancelAllStudentOrders: () => {
+    const engine = get().engine;
+    if (!engine) return;
+    const open = get().studentOpenOrders;
+    for (const o of open) engine.cancelStudentOrder(o.id);
+    set({ studentOpenOrders: [] });
+  },
+
+  flattenPosition: () => {
+    const pos = get().studentPosition;
+    if (pos.netQty === 0) return;
+    const side: Side = pos.netQty > 0 ? "sell" : "buy";
+    get().submitStudentOrder({
+      side,
+      type: "market",
+      price: 0,
+      qty: Math.abs(pos.netQty),
+    });
   },
 
   setChartType: (t) => set({ chartType: t }),
